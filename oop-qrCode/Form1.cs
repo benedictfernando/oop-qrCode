@@ -38,7 +38,7 @@ namespace oop_qrCode
 
         private void qr_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (videoCapture.IsRunning)
+            if (videoCapture != null && videoCapture.IsRunning)
             {
                 videoCapture.SignalToStop(); videoCapture.WaitForStop();
                 videoCapture.NewFrame -= new NewFrameEventHandler(CaptureDevice_NewFrame);
@@ -50,8 +50,8 @@ namespace oop_qrCode
         {        
             if (camera.Image != null)
             {
-                BarcodeReader barcodeReader = new BarcodeReader();
-                Result result = barcodeReader.Decode((Bitmap) camera.Image);
+                var barcodeReader = new BarcodeReader();
+                var result = barcodeReader.Decode((Bitmap) camera.Image);
                 if (result != null)
                 {
                     // note: path can be changed accdg. to preferred file destination

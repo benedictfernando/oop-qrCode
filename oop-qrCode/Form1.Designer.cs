@@ -55,6 +55,7 @@
             // 
             // camera
             // 
+            this.camera.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.camera.Dock = System.Windows.Forms.DockStyle.Fill;
             this.camera.Location = new System.Drawing.Point(3, 3);
             this.camera.Name = "camera";
