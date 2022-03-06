@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
+using ZXing;
 
 namespace oop_qrCode
 {
@@ -19,5 +16,60 @@ namespace oop_qrCode
             InitializeComponent();
         }
 
+        FilterInfoCollection filterInfoCollection;
+        VideoCaptureDevice videoCapture;
+            
+        void qr_Load(object sender, EventArgs e)
+        {
+            filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+        }
+
+        private void scan_Click(object sender, EventArgs e)
+        {
+            videoCapture = new VideoCaptureDevice(filterInfoCollection[1].MonikerString);
+            videoCapture.NewFrame += CaptureDevice_NewFrame;
+            videoCapture.Start(); timer1.Start();
+        }
+
+        private void CaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            camera.Image = (Bitmap) eventArgs.Frame.Clone();
+        }
+
+        private void qr_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (videoCapture.IsRunning)
+            {
+                videoCapture.SignalToStop(); videoCapture.WaitForStop();
+                videoCapture.NewFrame -= new NewFrameEventHandler(CaptureDevice_NewFrame);
+                videoCapture = null;
+            }
+        }
+
+        private async void timer1_Tick(object sender, EventArgs e)
+        {        
+            if (camera.Image != null)
+            {
+                BarcodeReader barcodeReader = new BarcodeReader();
+                Result result = barcodeReader.Decode((Bitmap) camera.Image);
+                if (result != null)
+                {
+                    // note: path can be changed accdg. to preferred file destination
+                    var path = @"C:\Users\Benedict Fernando\Documents";
+
+                    // process extracted data from 'result'
+                    await outputTxt(result.ToString(), path); timer1.Stop();
+
+                    // exit application
+                    MessageBox.Show("QR Code was successfully scanned! " +
+                        "Result is located at:\n\n" + path);
+                    Application.Exit();
+                }
+            }
+        }
+        public static async Task outputTxt(string text, string path)
+        {
+            await File.WriteAllTextAsync(path + @"\qrCode.txt", text);
+        }
     }
 }

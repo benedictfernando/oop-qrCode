@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(qr));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.camera = new System.Windows.Forms.PictureBox();
             this.scan = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.camera)).BeginInit();
             this.SuspendLayout();
@@ -69,6 +71,12 @@
             this.scan.TabIndex = 1;
             this.scan.Text = "Scan";
             this.scan.UseVisualStyleBackColor = true;
+            this.scan.Click += new System.EventHandler(this.scan_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // qr
             // 
@@ -80,6 +88,8 @@
             this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "qr";
             this.Text = "QR Code";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.qr_FormClosing);
+            this.Load += new System.EventHandler(this.qr_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.camera)).EndInit();
             this.ResumeLayout(false);
@@ -91,5 +101,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.PictureBox camera;
         private System.Windows.Forms.Button scan;
+        private System.Windows.Forms.Timer timer1;
     }
 }
