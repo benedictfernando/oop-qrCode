@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AForge.Video;
+using AForge.Video.DirectShow;
 
 namespace oop_qrCode
 {
-    public partial class Form1 : Form
+    public partial class qr : Form
     {
-        public Form1()
+        public qr()
         {
             InitializeComponent();
         }
